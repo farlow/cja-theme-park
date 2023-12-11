@@ -11,10 +11,10 @@ jobs:
   build_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Docker run test DB
-        uses: ./.github/workflows/reusable/test-db-run.yml 
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Docker run test DB
+        uses: ./.github/workflows/reusable/test-db-run.yml 
       - name: build
         run: |
           export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`

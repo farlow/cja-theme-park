@@ -47,10 +47,10 @@ jobs:
 
       - name: build image
         run: |
-          docker build -t p0l1na/themeparkride:1.0.${{ env.IMAGE_TAG }} -f Dockerfile .
-          docker build -t p0l1na/themeparkride:latest -f Dockerfile .
+          docker build -t ${{ DOCKERHUB_HOST }}/themeparkride:1.0.${{ env.IMAGE_TAG }} -f Dockerfile .
+          docker build -t ${{ DOCKERHUB_HOST }}/themeparkride:latest -f Dockerfile .
 
       - name: push image
         run: |
-          docker push p0l1na/themeparkride:1.0.${{ env.IMAGE_TAG }}
-          docker push p0l1na/themeparkride:latest
+          docker push ${{ DOCKERHUB_HOST }}/themeparkride:1.0.${{ env.IMAGE_TAG }}
+          docker push ${{ DOCKERHUB_HOST }}/themeparkride:latest

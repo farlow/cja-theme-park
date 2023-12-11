@@ -8,11 +8,11 @@ env:
   APP_NAME: theme-park-ride
 
 jobs:
-  call-reusable-workflow:
-    uses: reusable/test-db-run.yml 
   build_test:
     runs-on: ubuntu-latest
     steps:
+      - name: Docker run test DB
+        uses: ./.github/workflows/reusable/test-db-run.yml 
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: build

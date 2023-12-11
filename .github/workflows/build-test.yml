@@ -9,7 +9,7 @@ env:
 
 jobs:
   call-reusable-workflow:
-    uses: ./.github/workflows/reusable/test-db-run.yml 
+    uses: reusable/test-db-run.yml 
   build_test:
     runs-on: ubuntu-latest
     steps:

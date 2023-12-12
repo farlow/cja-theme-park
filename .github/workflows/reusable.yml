@@ -1,5 +1,5 @@
 name: tests workflow reutilisable
-run-name: run by ${{ github.actor }}
+run-name: Reusable workflow run by ${{ github.actor }}
 
 on:
   workflow_call:

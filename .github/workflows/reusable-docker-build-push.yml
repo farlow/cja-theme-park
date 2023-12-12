@@ -19,10 +19,10 @@ jobs:
   docker-build-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Download directory build/libs
+      - name: Download build directory
         uses: actions/download-artifact@v3
         with:
-          name: build-libs
+          name: build
       - name: login to docker hub
         uses: docker/login-action@v3
         with:
@@ -32,7 +32,7 @@ jobs:
         run: |
           ls -alrt *
           docker build -t ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} -f Dockerfile .
-          docker build -t ${{ inputs.dockerhub_host }}/themeparkride:latest -f Dockerfile .
+          docker tag ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} ${{ inputs.dockerhub_host }}/themeparkride:latest
       - name: push image
         run: |
           docker push ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }}

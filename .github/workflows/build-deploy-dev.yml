@@ -61,6 +61,7 @@ jobs:
       db_name: ${{ vars.DB_NAME_DEV }}
       db_username: ${{ vars.DB_USERNAME_DEV }}
       namespace: dev
+      dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
     secrets:
       aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
       aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

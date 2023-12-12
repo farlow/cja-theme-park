@@ -22,9 +22,6 @@ on:
         db_username:
           required: true
           type: string
-        db_user_pw:
-          required: true
-          type: string
         namespace:
           required: true
           type: string
@@ -32,6 +29,8 @@ on:
         aws_access_key:
           required: true
         aws_secret_access_key:
+          required: true
+        db_user_pw:
           required: true
 
 jobs:

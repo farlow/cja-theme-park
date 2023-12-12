@@ -1,0 +1,10 @@
+name: Calling workflow
+run-name: Calling workflow run by ${{ github.actor }}
+
+on: [push]
+
+jobs:
+  call-reusable-workflow:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      test_image_tag: 1.0.${GITHUB_RUN_NUMBER}

@@ -35,8 +35,8 @@ jobs:
           sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
           ./gradlew build
 
-      - name: docker-build-push
-        uses: ./.github/workflows/reusable-docker-build-push.yml
-        with:
-          image_tag: 1.0.${GITHUB_RUN_NUMBER}
+  docker-build-push:
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+      with:
+        image_tag: 1.0.${GITHUB_RUN_NUMBER}
 

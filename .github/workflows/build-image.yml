@@ -43,6 +43,6 @@ jobs:
 
   docker-build-push:
     uses: ./.github/workflows/reusable-docker-build-push.yml
-      with:
+    with:
         image_tag: 1.0.${GITHUB_RUN_NUMBER}
 

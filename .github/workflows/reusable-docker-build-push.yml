@@ -30,7 +30,6 @@ jobs:
           password: ${{ secrets.dockerhub_token }}
       - name: build image
         run: |
-          ls -alrt *
           docker build -t ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} -f Dockerfile .
           docker tag ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} ${{ inputs.dockerhub_host }}/themeparkride:latest
       - name: push image

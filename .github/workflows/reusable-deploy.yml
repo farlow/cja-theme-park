@@ -4,6 +4,9 @@ run-name: run by ${{ github.actor }} 🐱
 on:
   workflow_call:
       inputs:
+        image_tag:
+          required: true
+          type: string
         aws_region:
           required: true
           type: string

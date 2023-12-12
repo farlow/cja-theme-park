@@ -45,4 +45,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
         image_tag: 1.0.${GITHUB_RUN_NUMBER}
+        dockerhub_username: ${{ secret.DOCKERHUB_USERNAME }}
+        dockerhub_token: ${{ secret.DOCKERHUB_TOKEN }}
+        dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
 

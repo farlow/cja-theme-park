@@ -1,4 +1,4 @@
-name: Deploy on dev
+name: build, docker push and deploy on dev
 run-name: ${{ github.actor }} / Deploy on dev 🐱
 
 on:

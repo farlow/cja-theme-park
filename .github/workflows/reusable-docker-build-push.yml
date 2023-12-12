@@ -19,6 +19,10 @@ jobs:
   docker-build-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Download directory build/libs
+        uses: actions/download-artifact@v3
+        with:
+          name: build/libs
       - name: login to docker hub
         uses: docker/login-action@v3
         with:

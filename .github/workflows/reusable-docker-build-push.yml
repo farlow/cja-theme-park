@@ -7,7 +7,14 @@ on:
         image_tag:
           required: true
           type: string
-
+        dockerhub_host:
+          required: true
+          type: string
+      secrets:
+        dockerhub_username:
+          required: true
+        dockerhub_token:
+          required: true
 jobs:
   docker-build-push:
     runs-on: ubuntu-latest
@@ -15,13 +22,13 @@ jobs:
       - name: login to docker hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.dockerhub_username }}
+          password: ${{ secrets.dockerhub_token }}
       - name: build image
         run: |
-          docker build -t ${{ vars.DOCKERHUB_HOST }}/themeparkride:${{ inputs.image_tag }} -f Dockerfile .
-          docker build -t ${{ vars.DOCKERHUB_HOST }}/themeparkride:latest -f Dockerfile .
+          docker build -t ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} -f Dockerfile .
+          docker build -t ${{ inputs.dockerhub_host }}/themeparkride:latest -f Dockerfile .
       - name: push image
         run: |
-          docker push ${{ vars.DOCKERHUB_HOST }}/themeparkride:${{ inputs.image_tag }}
-          docker push ${{ vars.DOCKERHUB_HOST }}/themeparkride:latest
+          docker push ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }}
+          docker push ${{ inputs.dockerhub_host }}/themeparkride:latest

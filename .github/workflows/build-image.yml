@@ -38,6 +38,7 @@ jobs:
       - name: Archive directory build/libs
         uses: actions/upload-artifact@v3
         with:
+          name: build-libs
           path: |
             build/libs
 

@@ -1,0 +1,62 @@
+name: reusable deploy workflow
+run-name: run by ${{ github.actor }} 🐱
+
+on:
+  workflow_call:
+      inputs:
+        image_tag:
+          required: true
+          type: string
+        aws_region:
+          required: true
+          type: string
+        host:
+          required: true
+          type: string
+        db_host:
+          required: true
+          type: string
+        db_name:
+          required: true
+          type: string
+        db_username:
+          required: true
+          type: string
+        namespace:
+          required: true
+          type: string
+      secrets:
+        aws_access_key:
+          required: true
+        aws_secret_access_key:
+          required: true
+        db_user_pw:
+          required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: setup AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ inputs.aws_region }}
+          aws-access-key-id: ${{ secrets.aws_access_key }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+      - name: setup kubeconfig
+        run: |
+          export AWS_REGION=${{ inputs.aws_region }}
+          aws eks update-kubeconfig --region $AWS_REGION --name tmptpr
+      - name: deploy on dev
+        run: |
+          export HOST=${{ inputs.host }}
+          export DB_HOST="${{ inputs.db_host }}"
+          export DB_NAME="${{ inputs.db_name }}"
+          export DB_URL=`echo jdbc:mysql://$DB_HOST:3306/$DB_NAME`
+          export DB_USERNAME="${{ secrets.db_username }}"
+          export DB_PASSWORD="${{ secrets.db_user_pw }}"
+          export NAMESPACE="${{ inputs.namespace }}"
+          export IMAGE_TAG="${{ inputs.image_tag }}"
+          helm upgrade --install tpr -n $NAMESPACE --values ./helm-chart/values.yml --set host=$HOST--set db_url=$DB_URL  --set db_password=$DB_PASSWORD --set db_username=$DB_USERNAME --set tag=$IMAGE_TAG ./helm-chart

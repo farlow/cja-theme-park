@@ -22,7 +22,7 @@ jobs:
       - name: Download directory build/libs
         uses: actions/download-artifact@v3
         with:
-          name: Archive directory build/libs
+          name: build-libs
       - name: login to docker hub
         uses: docker/login-action@v3
         with:

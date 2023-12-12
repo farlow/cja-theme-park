@@ -7,13 +7,6 @@ on:
     - dev
 
 jobs:
-  release-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract Release Version
-        run: |
-          echo "IMAGE_TAG=1.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
-
   jar-build:
     runs-on: ubuntu-latest
     env:
@@ -22,6 +15,9 @@ jobs:
       BUILD_DB_USERNAME: 'username'
       BUILD_DB_PASSWORD: 'password'
     steps:
+      - name: Extract Release Version
+        run: |
+          echo "IMAGE_TAG=${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0

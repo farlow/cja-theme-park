@@ -47,7 +47,7 @@ jobs:
     needs: jar-build
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
-      image_tag: ${IMAGE_TAG}
+      image_tag: $IMAGE_TAG
       dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
     secrets:
       dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -57,7 +57,7 @@ jobs:
     needs: docker-build-push
     uses: ./.github/workflows/reusable-deploy.yml
     with:
-      image_tag: ${IMAGE_TAG}
+      image_tag: $IMAGE_TAG
       aws_region: ${{ vars.AWS_REGION }}
       host: ${{ vars.HOST_DEV }}
       db_host: ${{ vars.DB_HOST_DEV }}

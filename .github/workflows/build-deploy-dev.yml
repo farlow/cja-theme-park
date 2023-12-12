@@ -33,7 +33,7 @@ jobs:
           sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
           ./gradlew build
 
-      - name: Archive directory build/libs
+      - name: Archive directory build
         uses: actions/upload-artifact@v3
         with:
           name: build

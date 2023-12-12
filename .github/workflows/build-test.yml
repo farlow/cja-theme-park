@@ -24,7 +24,7 @@ jobs:
           export MYSQL_USER=$BUILD_DB_USERNAME
           export MYSQL_PASSWORD=$BUILD_DB_PASSWORD
           docker run -d --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes  -e MYSQL_DATABASE -e MYSQL_USER -e MYSQL_PASSWORD -p 3306:3306 mysql:8.0
-
+          
           export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`
           export DB_USERNAME=$BUILD_DB_USERNAME
           export DB_PASSWORD=$BUILD_DB_PASSWORD

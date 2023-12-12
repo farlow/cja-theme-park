@@ -31,12 +31,12 @@ spec:
               port: 5000
             initialDelaySeconds: 30
             periodSeconds: 5
-              #          readinessProbe:
-              #            httpGet:
-              #              path: /actuator/health
-              #              port: 5000
-              #            initialDelaySeconds: 5
-              #            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+            path: /actuator/health
+            port: 5000
+            initialDelaySeconds: 35
+            periodSeconds: 3
 
 ---
 

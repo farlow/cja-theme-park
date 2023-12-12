@@ -1,5 +1,5 @@
 name: build, docker push and deploy on dev
-run-name: ${{ github.actor }} / Deploy on dev 🐱
+run-name: ${{ github.actor }} / build, dokcer push and deploy on dev 🐱
 
 on:
   push:

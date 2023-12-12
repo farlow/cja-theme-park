@@ -44,8 +44,9 @@ jobs:
   docker-build-push:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
-        image_tag: 1.0.${GITHUB_RUN_NUMBER}
-        dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
-        dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
-        dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
+      image_tag: 1.0.${GITHUB_RUN_NUMBER}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+      dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
 

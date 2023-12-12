@@ -1,0 +1,68 @@
+name: build, docker push and deploy on prod
+run-name: ${{ github.actor }} / build, docker push and deploy on prod 🎢
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  jar-build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_DB_HOST: localhost
+      BUILD_DB_NAME: themepark
+      BUILD_DB_USERNAME: 'username'
+      BUILD_DB_PASSWORD: 'password'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: build gradle
+        run: |
+          export MYSQL_DATABASE=$BUILD_DB_NAME
+          export MYSQL_USER=$BUILD_DB_USERNAME
+          export MYSQL_PASSWORD=$BUILD_DB_PASSWORD
+          docker run -d --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes  -e MYSQL_DATABASE -e MYSQL_USER -e MYSQL_PASSWORD -p 3306:3306 mysql:8.0
+
+          export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`
+          export DB_USERNAME=$BUILD_DB_USERNAME
+          export DB_PASSWORD=$BUILD_DB_PASSWORD
+          sed -i "s/CI_PIPELINE_IID/${{ github.run_id }}/" ./src/main/resources/application.yml
+          sed -i "s/CI_COMMIT_SHORT_SHA/${{ github.sha }}/" ./src/main/resources/application.yml
+          sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
+          ./gradlew build
+
+      - name: Archive directory build
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: |
+            ./
+
+  docker-build-push:
+    needs: jar-build
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image_tag: 1.0.${GITHUB_RUN_NUMBER}
+      dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+  
+  deploy:
+    needs: docker-build-push
+    uses: ./.github/workflows/reusable-deploy.yml
+    with:
+      image_tag: 1.0.${GITHUB_RUN_NUMBER}
+      aws_region: ${{ vars.AWS_REGION }}
+      host: ${{ vars.HOST_PROD }}
+      db_host: ${{ vars.DB_HOST }}
+      db_name: ${{ vars.DB_NAME_PROD }}
+      db_username: ${{ vars.DB_USERNAME_PROD }}
+      namespace: prod
+      dockerhub_host: ${{ vars.DOCKERHUB_HOST }}
+    secrets:
+      aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      db_user_pw: ${{ secrets.DB_USER_PW_PROD }}

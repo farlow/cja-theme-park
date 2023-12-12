@@ -42,6 +42,7 @@ jobs:
             build/libs
 
   docker-build-push:
+    needs: jar-build
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image_tag: 1.0.${GITHUB_RUN_NUMBER}

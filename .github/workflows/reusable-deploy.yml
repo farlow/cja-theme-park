@@ -59,4 +59,4 @@ jobs:
           export DB_PASSWORD="${{ secrets.db_user_pw }}"
           export NAMESPACE="${{ inputs.namespace }}"
           export IMAGE_TAG="${{ inputs.image_tag }}"
-          helm upgrade --install tpr -n $NAMESPACE --values ./helm-chart/values.yml --set host=$HOST--set db_url=$DB_URL  --set db_password=$DB_PASSWORD --set db_username=$DB_USERNAME --set tag=$IMAGE_TAG ./helm-chart
+          helm upgrade --install tpr -n $NAMESPACE --values ./helm-chart/values.yml --set host=$HOST --set db_url=$DB_URL  --set db_password=$DB_PASSWORD --set db_username=$DB_USERNAME --set tag=$IMAGE_TAG ./helm-chart

@@ -1,0 +1,38 @@
+name: reusable docker build and docker hub push 
+run-name: run by ${{ github.actor }}
+
+on:
+  workflow_call:
+      inputs:
+        image_tag:
+          required: true
+          type: string
+        dockerhub_host:
+          required: true
+          type: string
+      secrets:
+        dockerhub_username:
+          required: true
+        dockerhub_token:
+          required: true
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build directory
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.dockerhub_username }}
+          password: ${{ secrets.dockerhub_token }}
+      - name: build image
+        run: |
+          docker build -t ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} -f Dockerfile .
+          docker tag ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }} ${{ inputs.dockerhub_host }}/themeparkride:latest
+      - name: push image
+        run: |
+          docker push ${{ inputs.dockerhub_host }}/themeparkride:${{ inputs.image_tag }}
+          docker push ${{ inputs.dockerhub_host }}/themeparkride:latest

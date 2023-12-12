@@ -46,6 +46,10 @@ metadata:
   name: {{ .Values.ingress_name }}
 spec:
   ingressClassName: traefik
+  tls:
+    - secretName: tpr-tls-secret
+      hosts:
+        - {{ .Values.host }}
   rules:
   - host: {{ .Values.host }}
     http:

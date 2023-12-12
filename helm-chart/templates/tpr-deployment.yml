@@ -26,6 +26,17 @@ spec:
               value: "{{ .Values.db_password }}"
           ports:
             - containerPort: 5000
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 3
 
 ---
 

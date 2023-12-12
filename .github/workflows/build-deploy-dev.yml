@@ -57,7 +57,7 @@ jobs:
       image_tag: 1.0.${GITHUB_RUN_NUMBER}
       aws_region: ${{ vars.AWS_REGION }}
       host: ${{ vars.HOST_DEV }}
-      db_host: ${{ vars.DB_HOST_DEV }}
+      db_host: ${{ vars.DB_HOST }}
       db_name: ${{ vars.DB_NAME_DEV }}
       db_username: ${{ vars.DB_USERNAME_DEV }}
       namespace: dev

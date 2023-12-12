@@ -1,13 +1,15 @@
 name: Deploy on dev
 run-name: ${{ github.actor }} / Deploy on dev 🐱
+
 on:
   push:
     branches:
     - dev
 
+env:
+  IMAGE_TAG: 1.0.${GITHUB_RUN_NUMBER}
+
 jobs:
-  env:
-    IMAGE_TAG: 1.0.${GITHUB_RUN_NUMBER}
   jar-build:
     runs-on: ubuntu-latest
     env:
@@ -19,7 +21,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
       - name: build gradle
         run: |
           export MYSQL_DATABASE=$BUILD_DB_NAME

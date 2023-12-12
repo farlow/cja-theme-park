@@ -26,6 +26,17 @@ spec:
               value: "{{ .Values.db_password }}"
           ports:
             - containerPort: 5000
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 5000
+            initialDelaySeconds: 35
+            periodSeconds: 3
 
 ---
 
@@ -35,6 +46,10 @@ metadata:
   name: {{ .Values.ingress_name }}
 spec:
   ingressClassName: traefik
+  tls:
+    - secretName: tpr-tls-secret
+      hosts:
+        - {{ .Values.host }}
   rules:
   - host: {{ .Values.host }}
     http:

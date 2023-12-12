@@ -35,8 +35,14 @@ jobs:
           sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
           ./gradlew build
 
-      - name: docker-build-push
-        uses: ./.github/workflows/reusable-docker-build-push.yml
+      - name: Archive directory build/libs
+        uses: actions/upload-artifact@v3
         with:
-          image_tag: 1.0.${GITHUB_RUN_NUMBER}
+          path: |
+            build/libs
+
+  docker-build-push:
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+        image_tag: 1.0.${GITHUB_RUN_NUMBER}
 

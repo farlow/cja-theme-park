@@ -8,7 +8,7 @@ spring:
       maximumPoolSize: 3
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: HIBERNATE-DDL-AUTO
 
 server:
   port: 5000
@@ -21,6 +21,7 @@ info:
 
 management:
   endpoints:
-    web:
-      exposure:
-        include: '*'
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true

@@ -31,6 +31,7 @@ jobs:
           sed -i "s/CI_PIPELINE_IID/${{ github.run_id }}/" ./src/main/resources/application.yml
           sed -i "s/CI_COMMIT_SHORT_SHA/${{ github.sha }}/" ./src/main/resources/application.yml
           sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
+          sed -i "s/HIBERNATE-DDL-AUTO/create/" ./src/main/resources/application.yml
           ./gradlew build
       - name: smoke test
         run: |

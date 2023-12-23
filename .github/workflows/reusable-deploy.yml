@@ -52,7 +52,7 @@ jobs:
         run: |
           export AWS_REGION=${{ inputs.aws_region }}
           aws eks update-kubeconfig --region $AWS_REGION --name tmptpr
-      - name: deploy on $NAMESPACE
+      - name: deploy on ${{ inputs.namespace }}
         run: |
           export HOST=${{ inputs.host }}
           export DB_HOST="${{ inputs.db_host }}"

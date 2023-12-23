@@ -51,7 +51,7 @@ jobs:
       - name: setup kubeconfig
         run: |
           export AWS_REGION=${{ inputs.aws_region }}
-          aws eks update-kubeconfig --region $AWS_REGION --name tmptpr
+          aws eks update-kubeconfig --region $AWS_REGION --name tpr
       - name: deploy on ${{ inputs.namespace }}
         run: |
           export HOST=${{ inputs.host }}

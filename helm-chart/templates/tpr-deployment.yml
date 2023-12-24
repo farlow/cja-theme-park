@@ -44,14 +44,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.ingress_name }}
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+#  annotations:
+#    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: traefik
-  tls:
-    - secretName: tpr-tls-secret
-      hosts:
-        - {{ .Values.host }}
+#  tls:
+#    - secretName: tpr-tls-secret
+#      hosts:
+#        - {{ .Values.host }}
   rules:
   - host: {{ .Values.host }}
     http:

@@ -1,0 +1,18 @@
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+  fallbackApiVersion: v1
+ingressRoute:
+  dashboard:
+    enabled: false
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+
+ports:
+  web:
+    expose: false
+  websecure:
+    nodePort: 32443

@@ -99,3 +99,15 @@ variable "cluster_issuer_email" {
   default     = "nom@mail.com"
   description = "email for letsencrypt"
 }
+
+variable "cloudns_auth_id" {
+  type = string
+  description = "Cloudns auth id"
+  sensitive = true
+}
+
+variable "cloudns_password" {
+  type = string
+  description = "Cloudns password"
+  sensitive = true 
+}

@@ -21,6 +21,8 @@ module "network" {
   aws_region      = var.aws_region
   private_subnets = var.private_subnets
   public_subnets  = var.public_subnets
+  cloudns_auth_id = var.cloudns_auth_id
+  cloudns_password = var.cloudns_password
 }
 
 module "rds" {

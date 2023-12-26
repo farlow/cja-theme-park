@@ -6,6 +6,10 @@ ingressRoute:
   dashboard:
     enabled: false
 
+service:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    
 autoscaling:
   enabled: true
   minReplicas: 2

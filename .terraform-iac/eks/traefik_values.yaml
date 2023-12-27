@@ -17,6 +17,9 @@ autoscaling:
 
 ports:
   web:
-    expose: false
+    expose: true
   websecure:
     nodePort: 32443
+
+globalArguments:
+- "--log.level=DEBUG"

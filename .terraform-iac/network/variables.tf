@@ -17,11 +17,3 @@ variable "private_subnets" {
 variable "public_subnets" {
   type = list(string)
 }
-
-variable "cloudns_auth_id" {
-  description = "Cloudns auth id"
-}
-
-variable "cloudns_password" {
-  description = "Cloudns password"
-}

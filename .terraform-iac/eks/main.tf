@@ -87,27 +87,6 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = "traefik"
-  }
-
-  depends_on = [module.eks]
-}
-
-resource "helm_release" "traefik_ingress" {
-  name      = "traefik-ingress-controller"
-  namespace = "traefik"
-
-  repository = "https://helm.traefik.io/traefik"
-  chart      = "traefik"
-
-  values = [
-    "${file("./eks/traefik_values.yaml")}"
-  ]
-  depends_on = [kubernetes_namespace.traefik]
-}
-
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
@@ -127,6 +106,27 @@ resource "helm_release" "cert-manager" {
     value = "true"
   }
   depends_on = [kubernetes_namespace.cert-manager]
+}
+
+resource "kubernetes_namespace" "traefik" {
+  metadata {
+    name = "traefik"
+  }
+
+  depends_on = [helm_release.cert-manager]
+}
+
+resource "helm_release" "traefik_ingress" {
+  name      = "traefik-ingress-controller"
+  namespace = "traefik"
+
+  repository = "https://helm.traefik.io/traefik"
+  chart      = "traefik"
+
+  values = [
+    "${file("./eks/traefik_values.yaml")}"
+  ]
+  depends_on = [kubernetes_namespace.traefik]
 }
 
 provider "kubectl" {

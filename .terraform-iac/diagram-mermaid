@@ -1,0 +1,7 @@
+flowchart TD
+   principal[principal] -- main.tf --> reseau[réseau]
+   reseau -- outputs.tf --> principal
+   principal[principal] -- main.tf --> kubernetes[kubernetes]
+   kubernetes -- outputs.tf --> principal
+   principal[principal] -- main.tf --> bd[base de données]
+   bd -- outputs.tf --> principal

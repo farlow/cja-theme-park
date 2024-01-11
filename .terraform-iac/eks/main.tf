@@ -21,6 +21,9 @@ module "eks" {
   subnet_ids               = var.public_nets
   control_plane_subnet_ids = var.public_nets
 
+  create_kms_key = false
+  attach_cluster_encryption_policy = false
+  cluster_encryption_config = {}
   eks_managed_node_group_defaults = {
     ami_type       = "${var.ami_type}"
     instance_types = ["${var.instance_types}"]
@@ -74,11 +77,6 @@ module "eks" {
   }
 }
 
-resource "aws_autoscaling_attachment" "node_group_to_NLB_attachment" {
-  autoscaling_group_name = module.eks.eks_managed_node_groups_autoscaling_group_names[0]
-  lb_target_group_arn    = var.target_group_arn
-}
-
 provider "helm" {
   kubernetes {
     host                   = module.eks.cluster_endpoint
@@ -117,7 +115,7 @@ resource "kubernetes_namespace" "traefik" {
 }
 
 resource "helm_release" "traefik_ingress" {
-  name      = "traefik-ingress-controller"
+  name      = "traefik"
   namespace = "traefik"
 
   repository = "https://helm.traefik.io/traefik"

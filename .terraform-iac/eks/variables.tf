@@ -38,10 +38,6 @@ variable "user4" {
   description = "IAM user4"
 }
 
-variable "target_group_arn" {
-  description = "Target group ARN"
-}
-
 variable "cluster_issuer_email" {
   description = "email for letsencrypt"
 }

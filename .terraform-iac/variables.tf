@@ -21,7 +21,6 @@ variable "db_name" {
   description = "DB name"
   default     = "themeparkride"
 }
-
 variable "db_username" {
   type        = string
   description = "DB username"

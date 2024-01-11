@@ -10,7 +10,6 @@ module "EKS" {
   user2                = var.user2
   user3                = var.user3
   user4                = var.user4
-  target_group_arn     = module.network.target_group_arn
   cluster_issuer_email = var.cluster_issuer_email
 }
 

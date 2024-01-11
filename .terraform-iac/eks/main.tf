@@ -105,6 +105,15 @@ resource "helm_release" "cert-manager" {
   }
   depends_on = [kubernetes_namespace.cert-manager]
 }
+resource "aws_iam_role_policy_attachment" "attach_cloudwatch_agent_server_policy" {
+  role = module.eks.eks_managed_node_groups["node-group1"].iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_aws_xray_write_only_access_policy" {
+  role = module.eks.eks_managed_node_groups["node-group1"].iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+}
 
 resource "kubernetes_namespace" "traefik" {
   metadata {

@@ -69,28 +69,10 @@ variable "account_id" {
   sensitive   = true
 }
 
-variable "user1" {
-  type        = string
-  description = "IAM user1"
-  default     = "chris"
-}
-
-variable "user2" {
-  type        = string
-  description = "IAM user2"
-  default     = "guillaume"
-}
-
-variable "user3" {
-  type        = string
-  description = "IAM user3"
-  default     = "pauline"
-}
-
-variable "user4" {
-  type        = string
-  description = "IAM user4"
-  default     = "github-deploy"
+variable "iam_list" {
+  type        = list(string)
+  description = "list of IAM user"
+  default     = ["chris", "guillaume", "pauline", "github_deploy"]
 }
 
 variable "cluster_issuer_email" {

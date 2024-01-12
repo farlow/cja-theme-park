@@ -22,20 +22,14 @@ variable "account_id" {
   description = "AWS Account ID"
 }
 
-variable "user1" {
-  description = "IAM user1"
+variable "namespace" {
+  type        = list(string)
+  description = "Namespace applicatif et infra"
 }
 
-variable "user2" {
-  description = "IAM user2"
-}
-
-variable "user3" {
-  description = "IAM user3"
-}
-
-variable "user4" {
-  description = "IAM user4"
+variable "iam_list" {
+  type        = list(string)
+  description = "list of IAM user"
 }
 
 variable "cluster_issuer_email" {

@@ -146,3 +146,4 @@ resource "kubernetes_namespace" "list_namespace" {
     name = each.key
   }
 }
+

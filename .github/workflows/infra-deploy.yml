@@ -11,43 +11,72 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  build_test:
+  terraform:
+    name: "Terraform Infrastructure Change Management"
     runs-on: ubuntu-latest
-    env:
-      BUILD_DB_HOST: localhost
-      BUILD_DB_NAME: themepark
-      BUILD_DB_USERNAME: 'username'
-      BUILD_DB_PASSWORD: 'password'
+    defaults:
+      run:
+        shell: bash
+        # We keep Terraform files in the terraform directory.
+        working-directory: ./terraform-iac
     steps:
-      - name: Check out repository code
+      - name: Checkout the repository to the runner
         uses: actions/checkout@v4
-      - name: build
-        run: |
-          export MYSQL_DATABASE=$BUILD_DB_NAME
-          export MYSQL_USER=$BUILD_DB_USERNAME
-          export MYSQL_PASSWORD=$BUILD_DB_PASSWORD
-          docker run -d --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes  -e MYSQL_DATABASE -e MYSQL_USER -e MYSQL_PASSWORD -p 3306:3306 mysql:8.0
 
-          export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`
-          export DB_USERNAME=$BUILD_DB_USERNAME
-          export DB_PASSWORD=$BUILD_DB_PASSWORD
-          sed -i "s/CI_PIPELINE_IID/${{ github.run_id }}/" ./src/main/resources/application.yml
-          sed -i "s/CI_COMMIT_SHORT_SHA/${{ github.sha }}/" ./src/main/resources/application.yml
-          sed -i "s/CI_COMMIT_BRANCH/${{ github.ref_name }}/" ./src/main/resources/application.yml
-          sed -i "s/HIBERNATE-DDL-AUTO/create/" ./src/main/resources/application.yml
-          ./gradlew build
-      - name: smoke test
-        run: |
-          export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`
-          export DB_USERNAME=$BUILD_DB_USERNAME
-          export DB_PASSWORD=$BUILD_DB_PASSWORD
-          java -jar ./build/libs/theme-park-ride-gradle.jar &
-          sleep 10
-          curl http://localhost:5000/actuator/health | grep "UP"
-      - name: unit test
-        run: |
-          export DB_URL=`echo jdbc:mysql://$BUILD_DB_HOST:3306/$BUILD_DB_NAME`
-          export DB_USERNAME=$BUILD_DB_USERNAME
-          export DB_PASSWORD=$BUILD_DB_PASSWORD
-          ./gradlew test
-          grep testsuite build/test-results/test/TEST-com.exemple.ThemeParkRideGradleApplicationTests.xml
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6
+
+      - name: Terraform init
+        id: init
+        run: terraform init
+
+
+      - name: Terraform format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform validate
+        id: validate
+        run: terraform validate
+
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+             <details><summary>Show Plan</summary>
+
+             \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+             </details>
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+             github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+       - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+       - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false

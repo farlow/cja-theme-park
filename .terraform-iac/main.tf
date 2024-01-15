@@ -21,13 +21,13 @@ module "network" {
 }
 
 module "rds" {
-  source       = "./rds"
-  aws_region   = var.aws_region
-  app          = var.app
-  vpc_id       = module.network.vpc_id
-  db_name      = var.db_name
-  db_username  = var.db_username
-  db_password  = var.db_password
-  private_nets = module.network.private_nets
-  public_subnets  = var.public_subnets
+  source         = "./rds"
+  aws_region     = var.aws_region
+  app            = var.app
+  vpc_id         = module.network.vpc_id
+  db_name        = var.db_name
+  db_username    = var.db_username
+  db_password    = var.db_password
+  private_nets   = module.network.private_nets
+  public_subnets = var.public_subnets
 }

@@ -1,4 +1,4 @@
-name: "Terraform Infrastructure Destroy"
+name: "Terraform Infrastructure destroy"
 run-name: ${{ github.actor }} / infra destroy 🚀
 
 on: workflow_dispatch

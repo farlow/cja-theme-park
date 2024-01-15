@@ -20,3 +20,6 @@ jobs:
         # We keep Terraform files in the terraform directory.
         working-directory: ./terraform-iac
     steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v4
+

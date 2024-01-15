@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash
+#        shell: bash
         # We keep Terraform files in the terraform directory.
         working-directory: ./terraform-iac
     steps:

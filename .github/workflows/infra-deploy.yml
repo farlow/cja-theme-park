@@ -9,6 +9,9 @@ env:
   # Credentials for deployment to AWS
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TFSTATE_S3_BUCKET: ${{ vars.TFSTATE_S3_BUCKET }}
+  TFSTATE_S3_KEY: ${{ vars.TFSTATE_S3_KEY }}
+  TFSTATE_DYNAMODB_TABLE: ${{ vars.TFSTATE_DYNAMODB_TABLE }}
 
 jobs:
   terraform:
@@ -30,7 +33,7 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform init
+        run: terraform init -backend-config=bucket=$TFSTATE_S3_BUCKET -backend-config=key=$TFSTATE_S3_KEY -backend-config=dynamodb_table=$TFSTATE_DYNAMODB_TABLE
 
 
       - name: Terraform format
